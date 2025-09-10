@@ -1,4 +1,4 @@
-import argparse
+import os
 import urllib.parse
 from datetime import datetime
 import psutil
@@ -7,34 +7,34 @@ from flask import Flask, render_template, request, redirect, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
 # -------------------
-# CLI args
+# Env vars (fallbacks included)
 # -------------------
-parser = argparse.ArgumentParser(description="Run Todo Flask app with MySQL")
-parser.add_argument("--db-password", default="", help="MySQL password")
-parser.add_argument("--db-name", default="", help="MySQL database name")
-parser.add_argument("--db-server", required=True, help="MySQL server host (e.g., 127.0.0.1)")
-parser.add_argument("--db-user", default="root", help="MySQL user (default: root)")
-parser.add_argument("--db-port", default=3306, type=int, help="MySQL port (default: 3306)")
-parser.add_argument("--host", default="0.0.0.0", help="Flask host (default: 0.0.0.0)")
-parser.add_argument("--port", default=5050, type=int, help="Flask port (default: 5050)")
-args = parser.parse_args()
+DB_USER = os.getenv("DB_USER", "root")
+DB_PASS = urllib.parse.quote_plus(os.getenv("DB_PASSWORD", ""))
+DB_HOST = os.getenv("DB_SERVER", "127.0.0.1")
+DB_PORT = int(os.getenv("DB_PORT", 3306))
+DB_NAME = os.getenv("DB_NAME", "todo_db")
+
+FLASK_HOST = os.getenv("FLASK_HOST", "0.0.0.0")
+FLASK_PORT = int(os.getenv("FLASK_PORT", 5000))
 
 # -------------------
-# DB connection
-# -------------------
-DB_USER = args.db_user
-DB_PASS = urllib.parse.quote_plus(args.db_password)
-DB_HOST = args.db_server
-DB_PORT = args.db_port
-DB_NAME = args.db_name if args.db_name else "todo_db"
-
 # Ensure DB exists
+# -------------------
 def ensure_database():
-    conn = pymysql.connect(host=DB_HOST, user=DB_USER, password=args.db_password, port=DB_PORT, database="mysql")
+    conn = pymysql.connect(
+        host=DB_HOST,
+        user=DB_USER,
+        password=os.getenv("DB_PASSWORD", ""),
+        port=DB_PORT,
+        database="mysql",
+    )
     cur = conn.cursor()
     cur.execute("SHOW DATABASES LIKE %s", (DB_NAME,))
     if not cur.fetchone():
-        cur.execute(f"CREATE DATABASE {DB_NAME} CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;")
+        cur.execute(
+            f"CREATE DATABASE {DB_NAME} CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+        )
         print(f"✅ Database {DB_NAME} created")
     cur.close()
     conn.close()
@@ -125,4 +125,4 @@ def delete_task(task_id):
 # -------------------
 if __name__ == "__main__":
     print(f"🚀 Starting Flask app with DB {DB_NAME} on {DB_HOST}:{DB_PORT}")
-    app.run(host=args.host, port=args.port, debug=True)
+    app.run(host=FLASK_HOST, port=FLASK_PORT, debug=True)
