@@ -7,7 +7,7 @@ services:
     ports:
       - "5000:5000"
     environment:
-      DB_SERVER: mysql-db
+      DB_SERVER: todoapp-mysql
       DB_USER: root
       DB_PASSWORD: test@123
       DB_NAME: todo_db
