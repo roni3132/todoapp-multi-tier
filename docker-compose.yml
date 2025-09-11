@@ -1,0 +1,50 @@
+version: "3.9"
+services:
+  flask-app:
+    build:
+      context: .
+      dockerfile: Dockerfile 
+    container_name: flask-app
+    ports:
+      - "5000:5000"
+    environment:
+      DB_SERVER: mysql-db
+      DB_USER: root
+      DB_PASSWORD: test@123
+      DB_NAME: todo_db
+    depends_on:
+      - mysql-db
+    networks:
+      - multiapp-network
+
+  mysql-db:
+    image: mysql:5.7
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: test@123
+      MYSQL_DATABASE: todo_db
+    volumes:
+      - multiapp-volume:/var/lib/mysql
+    networks:
+      - multiapp-network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mysql-db
+      MYSQL_ROOT_PASSWORD: test@123
+    depends_on:
+      - mysql-db
+    networks:
+      - multiapp-network
+
+volumes:
+  multiapp-volume:
+
+networks:
+  multiapp-network:
