@@ -7,8 +7,10 @@ services:
     ports:
       - "5000:5000"
     environment:
-      - DB_PASSWORD: 'test@123'
-      - DB_SERVER: 'todoapp-mysql'
+      DB_SERVER: mysql-db
+      DB_USER: root
+      DB_PASSWORD: test@123
+      DB_NAME: todo_db
     depends_on:
       - todoapp-mysql
     networks:
@@ -19,8 +21,8 @@ services:
     ports:
       - "3306:3306"
     environment:
-      -MYSQL_ROOT_PASSWORD: test@123
-      -MYSQL_DATABASE: todo_db
+      MYSQL_ROOT_PASSWORD: test@123
+      MYSQL_DATABASE: todo_db
     volumes:
       - todoapp-volume:/var/lib/mysql
     networks:
@@ -31,8 +33,8 @@ services:
     ports:
       - "8080:80"
     environment:
-      -PMA_HOST: todoapp-mysql
-      -MYSQL_ROOT_PASSWORD: test@123
+      PMA_HOST: todoapp-mysql
+      MYSQL_ROOT_PASSWORD: test@123
     depends_on:
       - todoapp-mysql
     networks:
