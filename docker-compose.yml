@@ -7,8 +7,8 @@ services:
     ports:
       - "5000:5000"
     environment:
-      - DB_PASSWORD: test@123
-      - DB_SERVER: todoapp-mysql
+      - DB_PASSWORD: 'test@123'
+      - DB_SERVER: 'todoapp-mysql'
     depends_on:
       - todoapp-mysql
     networks:
