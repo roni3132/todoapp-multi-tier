@@ -142,3 +142,50 @@ footer a:hover {
   color: #0d8ddb;
 }
 
+
+.task {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 16px;
+  margin: 12px 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  border-left: 6px solid #6c63ff; /* Accent color */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: grab;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.task:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.task strong {
+  font-size: 16px;
+  color: #333;
+}
+
+.task br + span,
+.task .meta {
+  display: block;
+  margin-top: 6px;
+  color: #666;
+  font-size: 14px;
+}
+
+.delete-btn {
+  background-color: #ff4d4f;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  margin-top: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.delete-btn:hover {
+  background-color: #e63946;
+}
+
