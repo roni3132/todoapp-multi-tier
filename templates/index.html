@@ -35,17 +35,22 @@
 
 
   <div class="container">
-    <div class="column" data-status="Pending" ondrop="handleDrop(event)" ondragover="allowDrop(event)">
-      <h2>🟡 Pending</h2>
-      {% for task in tasks if task.status == "Pending" %}
-      <div class="task" draggable="true" ondragstart="drag(event)" data-task-id="{{ task.id }}">
-        <strong>{{ task.title }}</strong><br>
-        Created: {{ task.created_at.strftime("%Y-%m-%d %H:%M") }}<br>
-        Priority: {{ task.priority }}<br>
-        <button class="delete-btn" onclick="deleteTask({{task.id}})">❌ Delete</button>
-      </div>
-      {% endfor %}
+   <div class="column" data-status="Pending" ondrop="handleDrop(event)" ondragover="allowDrop(event)">
+  <h2>🟡 Pending</h2>
+  {% for task in tasks if task.status == "Pending" %}
+  <div class="card shadow-sm mb-3 border-start border-4 border-warning task" draggable="true"
+       ondragstart="drag(event)" data-task-id="{{ task.id }}">
+    <div class="card-body p-3">
+      <h5 class="card-title mb-1 fw-bold">{{ task.title }}</h5>
+      <p class="card-text mb-1 text-muted small">🕒 {{ task.created_at.strftime("%Y-%m-%d %H:%M") }}</p>
+      <span class="badge bg-secondary mb-2">Priority: {{ task.priority }}</span>
+      <br>
+      <button class="btn btn-outline-danger btn-sm" onclick="deleteTask({{task.id}})">❌ Delete</button>
     </div>
+  </div>
+  {% endfor %}
+</div>
+
 
     <div class="column" data-status="In Progress" ondrop="handleDrop(event)" ondragover="allowDrop(event)">
       <h2>🔵 In Progress</h2>
