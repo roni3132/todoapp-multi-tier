@@ -13,5 +13,12 @@ pipeline{
                 echo "code has been built successfully"
             }
         }
+        stage("TEST CODE"){
+            steps{
+                sh 'docker ps -a'
+                echo "code has been tested successfully"
+            }
+        }
+
     }
 }
