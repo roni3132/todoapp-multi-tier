@@ -1,159 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Todo Kanban App</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='style.css') }}"
-      
-    />
-    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
-  </head>
-  <body>
-    <header>
-      <h1>📋 Todo Kanban App</h1>
-      <div class="stats-bar">
-        <div class="stat total">
-          📋 Total <span id="total-count">{{ counts.total }}</span>
-        </div>
-        <div class="stat pending">
-          🟡 Pending <span id="pending-count">{{ counts.pending }}</span>
-        </div>
-        <div class="stat progress">
-          🔵 In Progress <span id="progress-count">{{ counts.progress }}</span>
-        </div>
-        <div class="stat completed">
-          ✅ Completed <span id="completed-count">{{ counts.completed }}</span>
-        </div>
-        <div class="stat cpu">🖥️ CPU {{ cpu }}%</div>
-        <div class="stat memory">💾 Memory {{ memory }}%</div>
-        <div class="stat disk">📦 Disk {{ disk }}%</div>
-      </div>
-    </header>
+<head>
+  <meta charset="UTF-8">
+  <title>Todo Kanban App</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+</head>
+<body>
+  <header>
+    <h1>📋 Todo Kanban App</h1>
+    <div class="stats-bar">
+      <div class="stat total">📋 Total <span id="total-count">{{ counts.total }}</span></div>
+      <div class="stat pending">🟡 Pending <span id="pending-count">{{ counts.pending }}</span></div>
+      <div class="stat progress">🔵 In Progress <span id="progress-count">{{ counts.progress }}</span></div>
+      <div class="stat completed">✅ Completed <span id="completed-count">{{ counts.completed }}</span></div>
+      <div class="stat cpu">🖥️ CPU {{ cpu }}%</div>
+      <div class="stat memory">💾 Memory {{ memory }}%</div>
+      <div class="stat disk">📦 Disk {{ disk }}%</div>
+    </div>
+
+  </header>
 
     <div class="add-task">
-      <form action="/add" method="POST" class="task-form">
-        <input
-          type="text"
-          name="title"
-          placeholder="✏️ Enter new task"
-          required
-        />
-        <select name="priority">
-          <option>Low</option>
-          <option>Medium</option>
-          <option>High</option>
-        </select>
-        <button type="submit">➕ Add Task</button>
-      </form>
+    <form action="/add" method="POST" class="task-form">
+      <input type="text" name="title" placeholder="✏️ Enter new task" required>
+      <select name="priority">
+        <option>Low</option>
+        <option>Medium</option>
+        <option>High</option>
+      </select>
+      <button type="submit">➕ Add Task</button>
+    </form>
+  </div>
+
+
+  <div class="container">
+    <div class="column" data-status="Pending" ondrop="handleDrop(event)" ondragover="allowDrop(event)">
+      <h2>🟡 Pending</h2>
+      {% for task in tasks if task.status == "Pending" %}
+      <div class="task" draggable="true" ondragstart="drag(event)" data-task-id="{{ task.id }}">
+        <strong>{{ task.title }}</strong><br>
+        Created: {{ task.created_at.strftime("%Y-%m-%d %H:%M") }}<br>
+        Priority: {{ task.priority }}<br>
+        <button class="delete-btn" onclick="deleteTask({{task.id}})">❌ Delete</button>
+      </div>
+      {% endfor %}
     </div>
 
-    <div class="container">
-      <div
-        class="column"
-        data-status="Pending"
-        ondrop="handleDrop(event)"
-        ondragover="allowDrop(event)"
-      >
-        <h2>🟡 Pending</h2>
-        {% for task in tasks if task.status == "Pending" %}
-        <div
-          class="task"
-          draggable="true"
-          ondragstart="drag(event)"
-          data-task-id="{{ task.id }}"
-        >
-          <strong>{{ task.title }}</strong><br />
-          Created: {{ task.created_at.strftime("%Y-%m-%d %H:%M") }}<br />
-          {% if task.priority == "High" %}
-          <span class="badge badge-danger">🔺 High</span>
-          {% elif task.priority == "Medium" %}
-          <span class="badge badge-warning">⚠️ Medium</span>
-          {% else %}
-          <span class="badge badge-secondary">🔻 Low</span>
-          {% endif %}
-          <br />
-          <button class="delete-btn" onclick="deleteTask({{task.id}})">
-            ❌ Delete
-          </button>
-        </div>
-        {% endfor %}
+    <div class="column" data-status="In Progress" ondrop="handleDrop(event)" ondragover="allowDrop(event)">
+      <h2>🔵 In Progress</h2>
+      {% for task in tasks if task.status == "In Progress" %}
+      <div class="task" draggable="true" ondragstart="drag(event)" data-task-id="{{ task.id }}">
+        <strong>{{ task.title }}</strong><br>
+        Created: {{ task.created_at.strftime("%Y-%m-%d %H:%M") }}<br>
+        Priority: {{ task.priority }}<br>
+        <button class="delete-btn" onclick="deleteTask({{task.id}})">❌ Delete</button>
       </div>
-
-      <div
-        class="column"
-        data-status="In Progress"
-        ondrop="handleDrop(event)"
-        ondragover="allowDrop(event)"
-      >
-        <h2>🔵 In Progress</h2>
-        {% for task in tasks if task.status == "In Progress" %}
-        <div
-          class="task"
-          draggable="true"
-          ondragstart="drag(event)"
-          data-task-id="{{ task.id }}"
-        >
-          <strong>{{ task.title }}</strong><br />
-          Created: {{ task.created_at.strftime("%Y-%m-%d %H:%M") }}<br />
-          {% if task.priority == "High" %}
-          <span class="badge badge-danger">🔺 High</span>
-          {% elif task.priority == "Medium" %}
-          <span class="badge badge-warning">⚠️ Medium</span>
-          {% else %}
-          <span class="badge badge-secondary">🔻 Low</span>
-          {% endif %}
-          <br />
-          <button class="delete-btn" onclick="deleteTask({{task.id}})">
-            ❌ Delete
-          </button>
-        </div>
-        {% endfor %}
-      </div>
-
-      <div
-        class="column"
-        data-status="Completed"
-        ondrop="handleDrop(event)"
-        ondragover="allowDrop(event)"
-      >
-        <h2>✅ Completed</h2>
-        {% for task in tasks if task.status == "Completed" %}
-        <div
-          class="task"
-          draggable="true"
-          ondragstart="drag(event)"
-          data-task-id="{{ task.id }}"
-        >
-          <strong>{{ task.title }}</strong><br />
-          Created: {{ task.created_at.strftime("%Y-%m-%d %H:%M") }}<br />
-          Completed: {{ task.completed_at.strftime("%Y-%m-%d %H:%M") if
-          task.completed_at else '-' }}<br />
-          {% if task.priority == "High" %}
-          <span class="badge badge-danger">🔺 High</span>
-          {% elif task.priority == "Medium" %}
-          <span class="badge badge-warning">⚠️ Medium</span>
-          {% else %}
-          <span class="badge badge-secondary">🔻 Low</span>
-          {% endif %}
-          <br />
-          <button class="delete-btn" onclick="deleteTask({{task.id}})">
-            ❌ Delete
-          </button>
-        </div>
-        {% endfor %}
-      </div>
+      {% endfor %}
     </div>
-  </body>
-  <footer>
-    <p>
-      🚀 Todo Kanban App • Built with Flask & ❤️ <br />
-      Made by
-      <a href="https://www.linkedin.com/in/rohan-ghoghari/" target="_blank"
-        >Mr. Rohan Ghoghari</a
-      >
-    </p>
-  </footer>
+
+    <div class="column" data-status="Completed" ondrop="handleDrop(event)" ondragover="allowDrop(event)">
+      <h2>✅ Completed</h2>
+      {% for task in tasks if task.status == "Completed" %}
+      <div class="task" draggable="true" ondragstart="drag(event)" data-task-id="{{ task.id }}">
+        <strong>{{ task.title }}</strong><br>
+        Created: {{ task.created_at.strftime("%Y-%m-%d %H:%M") }}<br>
+        Completed: {{ task.completed_at.strftime("%Y-%m-%d %H:%M") if task.completed_at else '-' }}<br>
+        Priority: {{ task.priority }}<br>
+        <button class="delete-btn" onclick="deleteTask({{task.id}})">❌ Delete</button>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</body>
+<footer>
+  <p>
+    🚀 Todo Kanban App • Built with Flask & ❤️ <br>
+    Made by <a href="https://www.linkedin.com/in/rohan-ghoghari/" target="_blank">Mr. Rohan Ghoghari</a>
+  </p>
+</footer>
+
+
 </html>
