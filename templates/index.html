@@ -6,6 +6,7 @@
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='style.css') }}"
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     />
     <script src="{{ url_for('static', filename='script.js') }}" defer></script>
   </head>
@@ -65,12 +66,12 @@
         >
           <strong>{{ task.title }}</strong><br />
           Created: {{ task.created_at.strftime("%Y-%m-%d %H:%M") }}<br />
-          Priority: {% if task.priority == "High" %}
-          <span class="badge badge-danger">High</span>
+          {% if task.priority == "High" %}
+          <span class="badge badge-danger">🔺 High</span>
           {% elif task.priority == "Medium" %}
-          <span class="badge badge-warning">Medium</span>
+          <span class="badge badge-warning">⚠️ Medium</span>
           {% else %}
-          <span class="badge badge-secondary">Low</span>
+          <span class="badge badge-secondary">🔻 Low</span>
           {% endif %}
           <br />
           <button class="delete-btn" onclick="deleteTask({{task.id}})">
@@ -96,12 +97,12 @@
         >
           <strong>{{ task.title }}</strong><br />
           Created: {{ task.created_at.strftime("%Y-%m-%d %H:%M") }}<br />
-          Priority: {% if task.priority == "High" %}
-          <span class="badge badge-danger">High</span>
+          {% if task.priority == "High" %}
+          <span class="badge badge-danger">🔺 High</span>
           {% elif task.priority == "Medium" %}
-          <span class="badge badge-warning">Medium</span>
+          <span class="badge badge-warning">⚠️ Medium</span>
           {% else %}
-          <span class="badge badge-secondary">Low</span>
+          <span class="badge badge-secondary">🔻 Low</span>
           {% endif %}
           <br />
           <button class="delete-btn" onclick="deleteTask({{task.id}})">
@@ -129,12 +130,12 @@
           Created: {{ task.created_at.strftime("%Y-%m-%d %H:%M") }}<br />
           Completed: {{ task.completed_at.strftime("%Y-%m-%d %H:%M") if
           task.completed_at else '-' }}<br />
-          Priority: {% if task.priority == "High" %}
-          <span class="badge badge-danger">High</span>
+          {% if task.priority == "High" %}
+          <span class="badge badge-danger">🔺 High</span>
           {% elif task.priority == "Medium" %}
-          <span class="badge badge-warning">Medium</span>
+          <span class="badge badge-warning">⚠️ Medium</span>
           {% else %}
-          <span class="badge badge-secondary">Low</span>
+          <span class="badge badge-secondary">🔻 Low</span>
           {% endif %}
           <br />
           <button class="delete-btn" onclick="deleteTask({{task.id}})">
