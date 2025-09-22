@@ -9,9 +9,15 @@ pipeline{
         }
         stage("BUILD CODE"){
             steps{
-                sh 'docker-compose down'   
-                sh 'docker-compose up -d'
+                sh 'docker-compose down'
+                sh 'docker-compose build --no-cache'
                 echo "code has been built successfully"
+            }
+        }
+         stage("Deploy CODE"){
+            steps{
+                sh 'docker-compose up -d'
+                echo "code has been deployed successfully"
             }
         }
         stage("TEST CODE"){
