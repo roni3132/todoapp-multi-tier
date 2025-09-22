@@ -9,6 +9,7 @@ pipeline{
         }
         stage("BUILD CODE"){
             steps{
+                sh 'docker-compose down'   
                 sh 'docker-compose up -d'
                 echo "code has been built successfully"
             }
