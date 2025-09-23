@@ -18,8 +18,8 @@ pipeline{
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockeridpass', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PAT')]) {
                     sh 'echo $DOCKER_PAT | docker login -u $DOCKER_USER --password-stdin'
-                    sh 'docker tag todoapp-backend:latest roni313233/todoapp-backend:latest'
-                    sh 'docker push roni313233/todoapp-backend:latest'
+                    sh 'docker tag todoapp-backend:latest $DOCKER_USER/todoapp-backend:latest'
+                    sh 'docker push $DOCKER_USER/todoapp-backend:latest'
                     echo "Docker login and image push successful"
                 }
             }

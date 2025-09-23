@@ -3,6 +3,7 @@ services:
   todoapp-backend:
     build:
       context: .
+    image: todoapp-backend:latest
     container_name: todoapp-backend
     restart: always
     ports:
