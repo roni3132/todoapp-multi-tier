@@ -3,6 +3,7 @@ services:
   todoapp-backend:
     build:
       context: .
+    container_name: todoapp-backend
     restart: always
     ports:
       - "5000:5000"

@@ -14,6 +14,16 @@ pipeline{
                 echo "code has been built successfully"
             }
         }
+        stage('Docker Login') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockeridpass', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PAT')]) {
+                    sh 'echo $DOCKER_PAT | docker login -u $DOCKER_USER --password-stdin'
+                    sh 'docker tag todoapp-backend:latest roni313233/todoapp-backend:latest'
+                    sh 'docker push roni313233/todoapp-backend:latest'
+                    echo "Docker login and image push successful"
+                }
+            }
+        }
          stage("Deploy CODE"){
             steps{
                 sh 'docker-compose up -d'
