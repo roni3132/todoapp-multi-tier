@@ -17,8 +17,11 @@ pipeline{
         stage("SONARQUBE SCAN") {
             steps {
                 withSonarQubeEnv('Sonar') {
-                    sh 'sonar-scanner'
-                    echo "✅ SonarQube scan completed"
+                    step([
+                        $class: 'SonarQubeScanner',
+                        installationName: 'Sonar'
+                    ])
+                    echo "✅ SonarQube scan triggered via plugin"
                 }
             }
         }
