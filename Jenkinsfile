@@ -14,6 +14,14 @@ pipeline{
                 echo "code has been built successfully"
             }
         }
+        stage("SONARQUBE SCAN") {
+            steps {
+                withSonarQubeEnv('Sonar') {
+                    sh 'sonar-scanner'
+                    echo "✅ SonarQube scan completed"
+                }
+            }
+        }
         stage('Docker Login') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockeridpass', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PAT')]) {
