@@ -14,14 +14,17 @@ pipeline{
                 echo "code has been built successfully"
             }
         }
-        stage("SONARQUBE SCAN") {
+        stage('SONARQUBE SCAN') {
             steps {
                 withSonarQubeEnv('Sonar') {
-                    step([
-                        $class: 'SonarQubeScanner',
-                        installationName: 'Sonar'
-                    ])
-                    echo "✅ SonarQube scan triggered via plugin"
+                    sh "${tool 'Sonar'}/bin/sonar-scanner"
+                }
+            }
+        }
+        stage('SonarQube Quality Gate') {
+            steps {
+                timeout(time: 2, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
                 }
             }
         }
