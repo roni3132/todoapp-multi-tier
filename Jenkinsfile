@@ -28,6 +28,11 @@ pipeline{
                 }
             }
         }
+        stage("Trivy Scan"){
+            steps{
+                sh 'trivy image todoapp-backend:latest'
+            }
+        }
         stage('Docker Login') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockeridpass', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PAT')]) {
