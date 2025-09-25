@@ -32,6 +32,12 @@ pipeline{
                 sh 'trivy image todoapp-backend:latest'
             }
         }
+        stage("OWASP Scan"){
+            steps{
+                dependencyCheck additionalArguments: '--scan ./ ', odcInstallation: 'OWASP'
+                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+            }
+        }
 
         stage('Docker Login') {
             steps {
