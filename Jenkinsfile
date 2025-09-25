@@ -9,7 +9,6 @@ pipeline{
         }
         stage("BUILD CODE"){
             steps{
-                sh 'docker-compose down'
                 sh 'docker-compose build --no-cache'
                 echo "code has been built successfully"
             }
@@ -33,6 +32,7 @@ pipeline{
                 sh 'trivy image todoapp-backend:latest'
             }
         }
+
         stage('Docker Login') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockeridpass', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PAT')]) {
