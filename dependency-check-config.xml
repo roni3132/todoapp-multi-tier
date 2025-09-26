@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scan xmlns="https://jeremylong.github.io/DependencyCheck/dependency-check.2.0.xsd">
+    <suppressionFile>dependency-check-suppressions.xml</suppressionFile>
+</scan>

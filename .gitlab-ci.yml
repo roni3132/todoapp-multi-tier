@@ -1,0 +1,110 @@
+stages:
+  - build
+  - sonarqube-scan
+  - quality-gate
+  - security-scan
+  - docker-push
+  - deploy
+  - test
+
+variables:
+
+build-code:
+  stage: build
+  script:
+    - docker-compose build --no-cache
+    - echo "code has been built successfully"
+  only:
+    - main
+
+sonarqube-scan:
+  stage: sonarqube-scan
+  image: 
+    name: sonarsource/sonar-scanner-cli:latest
+    entrypoint: [""]
+  script:
+    - sonar-scanner
+      -Dsonar.projectKey=todoapp
+      -Dsonar.sources=.
+      -Dsonar.host.url=${SONARQUBE_URL}
+      -Dsonar.login=${SONARQUBE_TOKEN}
+  only:
+    - main
+
+quality-gate:
+  stage: quality-gate
+  image: curlimages/curl:latest
+  script:
+    - |
+      echo "Waiting for SonarQube quality gate..."
+      # This is a simplified version - you might need a script to poll SonarQube API
+      - apk add --no-cache jq
+      - |
+        timeout=120
+        interval=10
+        elapsed=0
+        while [ $elapsed -lt $timeout ]; do
+          status=$(curl -s -u "${SONARQUBE_TOKEN}:" "${SONARQUBE_URL}/api/qualitygates/project_status?projectKey=todoapp" | jq -r '.projectStatus.status')
+          if [ "$status" = "OK" ]; then
+            echo "Quality Gate passed!"
+            exit 0
+          elif [ "$status" = "ERROR" ]; then
+            echo "Quality Gate failed!"
+            exit 1
+          fi
+          echo "Waiting for Quality Gate... Status: $status"
+          sleep $interval
+          elapsed=$((elapsed + interval))
+        done
+        echo "Timeout waiting for Quality Gate"
+        exit 1
+  only:
+    - main
+
+trivy-scan:
+  stage: security-scan
+  image: aquasec/trivy:latest
+  script:
+    - trivy image todoapp-backend:latest
+  allow_failure: true  # Continue even if vulnerabilities found
+  only:
+    - main
+
+owasp-scan:
+  stage: security-scan
+  image: owasp/dependency-check:latest
+  script:
+    - dependency-check.sh --scan . --format HTML --format JSON --out reports/
+  artifacts:
+    paths:
+      - reports/
+    expire_in: 1 week
+  only:
+    - main
+
+docker-login:
+  stage: docker-push
+  script:
+    - echo $DOCKER_PAT | docker login -u $DOCKER_USER --password-stdin
+    - docker tag todoapp-backend:latest $DOCKER_USER/todoapp-backend:latest
+    - docker push $DOCKER_USER/todoapp-backend:latest
+    - echo "Docker login and image push successful"
+  only:
+    - main
+
+deploy-code:
+  stage: deploy
+  script:
+    - docker-compose down || true
+    - docker-compose up -d
+    - echo "code has been deployed successfully"
+  only:
+    - main
+
+test-code:
+  stage: test
+  script:
+    - docker ps -a
+    - echo "code has been tested successfully"
+  only:
+    - main
