@@ -6,8 +6,7 @@ metadata:
     app: phpmyadmin
 spec:
   selector:
-    matchLabels:
-      app: phpmyadmin
+    app: phpmyadmin
   ports:
     - protocol: TCP
       port: 8081
