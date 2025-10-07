@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.26.1 (a9d05d509)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: todoapp-backend
+  name: todoapp-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: todoapp-backend
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.26.1 (a9d05d509)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/todoapp-network: "true"
+        io.kompose.service: todoapp-backend
+    spec:
+      containers:
+        - env:
+            - name: DB_NAME
+              value: todo_db
+            - name: DB_PASSWORD
+              value: test@123
+            - name: DB_SERVER
+              value: todoapp-mysql
+            - name: DB_USER
+              value: root
+          image: todoapp-backend:latest
+          name: todoapp-backend
+          ports:
+            - containerPort: 5000
+          resources: {}
+      restartPolicy: Always
+status: {}
