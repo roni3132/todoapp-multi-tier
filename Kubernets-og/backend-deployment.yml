@@ -10,22 +10,22 @@ spec:
     matchLabels:
       app: todoapp-backend
   templets:
-  metdata:
-    labels:
-      app: todoapp-backend  
-  spec:
-    containers:
-      - name: todoapp-backend
-        image: roni313233/todoapp-backend
-        imagePullPolicy: Always
-        ports:
-          - containerPort: 8080
-        env:
-          - name: DB_SERVER
-            value: "mysql"
-          - name: DB_NAME
-            value: "todo_db"
-          - name: DB_USER
-            value: root
-          - name: DB_PASSWORD
-            value: "Test@123"
+    metdata:
+      labels:
+        app: todoapp-backend  
+    spec:
+      containers:
+        - name: todoapp-backend
+          image: roni313233/todoapp-backend
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DB_SERVER
+              value: "mysql"
+            - name: DB_NAME
+              value: "todo_db"
+            - name: DB_USER
+              value: root
+            - name: DB_PASSWORD
+              value: "Test@123"

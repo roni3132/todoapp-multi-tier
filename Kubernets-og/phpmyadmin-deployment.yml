@@ -10,18 +10,18 @@ spec:
     matchLabels:
       app: phpmyadmin
   templets:
-  metdata:
-    labels:
-      app: phpmyadmin
-  spec:
-    containers:
-      - name: phpmyadmin
-        image: mysql:5.7
-        imagePullPolicy: Always
-        ports:
-          - containerPort: 8081
-        env:
-          - name: PMA_HOST
-            value: "mysql"
-          - name: MYSQL_ROOT_PASSWORD
-            value: "Test@123"
+    metdata:
+      labels:
+        app: phpmyadmin
+    spec:
+      containers:
+        - name: phpmyadmin
+          image: mysql:5.7
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8081
+          env:
+            - name: PMA_HOST
+              value: "mysql"
+            - name: MYSQL_ROOT_PASSWORD
+              value: "Test@123"
