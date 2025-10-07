@@ -7,6 +7,7 @@ metadata:
 spec:
   replicas: 1
   selector:
+    matchLabels:
       app: todoapp-backend
   template:
     metadata:
