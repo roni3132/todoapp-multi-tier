@@ -1,4 +1,4 @@
-apiVersion: v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mysql-Deployment
@@ -7,7 +7,6 @@ metadata:
 spec:
   replicas: 1
   selector:
-    matchLabels:
       app: mysql
   template:
     metadata:
