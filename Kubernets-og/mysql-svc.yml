@@ -6,7 +6,8 @@ metadata:
     app: mysql
 spec:
   selector:
-    app: mysql
+    matchLabels:
+      app: mysql
   ports:
     - protocol: TCP
       port: 3306
