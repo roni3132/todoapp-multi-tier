@@ -9,8 +9,8 @@ spec:
   selector:
     matchLabels:
       app: phpmyadmin
-  templets:
-    metdata:
+  template:
+    metadata:
       labels:
         app: phpmyadmin
     spec:

@@ -9,8 +9,8 @@ spec:
   selector:
     matchLabels:
       app: todoapp-backend
-  templets:
-    metdata:
+  template:
+    metadata:
       labels:
         app: todoapp-backend  
     spec:
