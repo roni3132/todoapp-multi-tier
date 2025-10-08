@@ -3,13 +3,12 @@ kind: Service
 metadata:
     name: backend-svc
     labels:
-        app: backend
+        app: todoapp-backend
 spec:
+    type: LoadBalancer
     selector: 
-        app: backend
+        app: todoapp-backend
     ports:
         - protocol: TCP
           port: 80
           targetPort: 8080
-          nodePort: 30080
-    type: NodePort

@@ -5,11 +5,10 @@ metadata:
   labels:
     app: phpmyadmin
 spec:
+  type: LoadBalancer
   selector:
     app: phpmyadmin
   ports:
     - protocol: TCP
       port: 8081
       targetPort: 8081 
-      nodePort: 30081
-  type: NodePort
